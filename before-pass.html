@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>YourTurn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --paper:#F6F1E8;--surface:#FFFDF8;--ink:#102033;--muted:#728092;
+  --accent:#FF6B4A;--night:#0A1728;--line:rgba(16,32,51,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#E9E3D9}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+button,input{font:inherit}button{cursor:pointer;border:0;background:none}
+.app{width:100%;max-width:440px;min-height:100dvh;margin:0 auto;background:var(--paper);position:relative;overflow:hidden;box-shadow:0 0 70px rgba(16,32,51,.14)}
+.display{font-family:'Archivo Black',sans-serif;letter-spacing:-.02em;line-height:.96}
+.screen{display:none;min-height:100dvh;animation:fade .26s ease both}
+.screen.active{display:flex;flex-direction:column}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.btn{border-radius:16px;min-height:54px;padding:0 18px;display:flex;align-items:center;justify-content:center;gap:9px;font-weight:700;transition:.15s}
+.btn:active{transform:scale(.985)}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.accent{background:var(--accent);color:#fff;box-shadow:0 10px 26px rgba(255,107,74,.25)}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.icon-btn{width:40px;height:40px;border-radius:13px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:16px;color:var(--ink);flex:none}
+
+/* Boot */
+#s-boot{align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
+.spinner{width:30px;height:30px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#boot-msg{font-size:13px;font-weight:500;color:var(--muted);max-width:30ch;line-height:1.5}
+
+/* Start */
+#s-start{padding:calc(24px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));gap:18px}
+.topbar{display:flex;align-items:center;gap:9px}
+.logo-mark{width:26px;height:26px;border-radius:9px;background:var(--accent);transform:rotate(-7deg);flex:none}
+.logo-word{font-family:'Archivo Black';font-size:16px}
+.start-h1{font-size:42px}
+.hero{position:relative;flex:1;min-height:300px;border-radius:28px;overflow:hidden;background:var(--night)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .4s}
+.hero img.switching{opacity:.15}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,7,12,.05) 45%,rgba(3,7,12,.9) 100%)}
+.hero-bottom{position:absolute;z-index:2;left:18px;right:18px;bottom:18px;display:flex;flex-direction:column;gap:14px}
+.hero-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.6)}
+.hero-status{font-family:'Archivo Black';font-size:27px;color:#fff;line-height:1}
+.hero-crew{display:flex;gap:8px}
+.hero-crew button{width:40px;height:40px;border-radius:50%;padding:0;flex:none;position:relative}
+.hero-crew img{width:100%;height:100%;border-radius:50%;object-fit:cover;opacity:.6;filter:saturate(.6);transition:.25s}
+.hero-crew button.active img{opacity:1;filter:none}
+.hero-crew button.active:after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2.5px solid var(--accent)}
+.form-row{display:flex;gap:10px}
+.field{flex:1;min-width:0;height:56px;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:0 16px;outline:none;font-weight:500;font-size:16px;color:var(--ink)}
+.field::placeholder{color:var(--muted)}
+.field:focus{border-color:var(--accent)}
+.create-btn{width:56px;height:56px;border-radius:16px;background:var(--accent);color:#fff;font-size:22px;font-weight:700;box-shadow:0 9px 22px rgba(255,107,74,.3);flex:none}
+.create-btn:active{transform:scale(.95)}
+.start-foot{text-align:center;font-size:11px;font-weight:500;color:var(--muted)}
+
+/* Share */
+#s-share{padding:calc(24px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));gap:18px}
+.share-head{display:flex;align-items:flex-start;justify-content:space-between}
+.share-head h1{font-size:36px;margin-top:6px}
+.share-card{background:var(--night);color:#fff;border-radius:28px;padding:22px;position:relative;overflow:hidden}
+.share-card:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:var(--accent);opacity:.22;right:-80px;top:-90px}
+.share-trip{position:relative;font-family:'Archivo Black';font-size:21px}
+.share-sub{position:relative;color:rgba(255,255,255,.6);font-size:12px;margin-top:4px}
+.qr-wrap{width:186px;height:186px;border-radius:22px;background:var(--surface);margin:20px auto 16px;display:grid;place-items:center}
+.link-box{position:relative;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);padding:12px;border-radius:15px;display:flex;align-items:center;gap:10px}
+.link-box b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;font-weight:500}
+.copy-btn{background:#fff;color:var(--ink);font-weight:700;font-size:11px;border-radius:10px;padding:9px 12px;flex:none}
+.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Album */
+.album-inner{flex:1;display:flex;flex-direction:column;gap:16px;padding:calc(24px + env(safe-area-inset-top)) 20px 14px}
+.album-head{display:flex;align-items:center;gap:8px}
+.album-title{flex:1;min-width:0}
+.album-title h2{font-family:'Archivo Black';font-size:21px}
+.album-title p{font-size:11px;font-weight:500;color:var(--muted);margin-top:3px}
+.turn-rail{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid rgba(16,32,51,.08);border-radius:18px;padding:10px 14px 10px 12px}
+.rail-person{width:32px;height:32px;border-radius:50%;flex:none;position:relative;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--muted);opacity:.5;transition:.25s}
+.rail-person.active{opacity:1;background:var(--ink)}
+.rail-person.active:after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--accent);animation:railpulse 2s ease-in-out infinite}
+@keyframes railpulse{0%,100%{opacity:1}50%{opacity:.45}}
+.rail-copy{margin-left:auto;text-align:right;white-space:nowrap}
+.rail-copy b{display:block;font-size:13px}
+.rail-copy span{display:block;font-size:10px;font-weight:500;color:var(--muted);margin-top:2px}
+.anchor-card{position:relative;border-radius:24px;overflow:hidden;min-height:230px;background:var(--night);text-align:left;padding:0;width:100%}
+.anchor-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.anchor-card:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(5,10,18,.88),rgba(5,10,18,.02) 62%)}
+.anchor-chip{position:absolute;z-index:2;top:14px;left:14px;background:rgba(255,255,255,.92);color:var(--ink);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:7px 10px;border-radius:999px}
+.anchor-copy{position:absolute;z-index:2;left:16px;right:16px;bottom:14px}
+.anchor-copy b{display:block;font-family:'Archivo Black';font-size:19px;color:#fff}
+.anchor-copy span{display:block;font-size:11px;font-weight:500;color:rgba(255,255,255,.7);margin-top:4px}
+.section-row{display:flex;align-items:baseline;justify-content:space-between}
+.section-row h3{font-family:'Archivo Black';font-size:17px}
+.section-row button{color:var(--accent);font-weight:700;font-size:12px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.photo{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:1;padding:0;background:rgba(16,32,51,.06);animation:pop .4s cubic-bezier(.2,.8,.3,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-meta{position:absolute;left:9px;bottom:9px;background:rgba(4,10,18,.55);backdrop-filter:blur(8px);color:#fff;font-size:9.5px;font-weight:700;border-radius:999px;padding:6px 8px}
+.photo.uploading{display:grid;place-items:center}
+.empty{border:1.5px dashed rgba(16,32,51,.18);border-radius:22px;padding:26px 20px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.empty b{font-family:'Archivo Black';font-size:16px}
+.empty p{font-size:12px;font-weight:500;color:var(--muted);line-height:1.5;max-width:30ch}
+.bottom-nav{position:sticky;bottom:0;display:flex;align-items:center;gap:6px;padding:10px 10px calc(22px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--paper) 76%,transparent)}
+.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 6px;border-radius:13px;color:var(--muted);font-size:9.5px;font-weight:700}
+.nav-tab .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.nav-tab.active{color:var(--ink);background:var(--surface)}
+.camera-btn{width:60px;height:60px;border-radius:20px;background:var(--accent);display:grid;place-items:center;box-shadow:0 10px 24px rgba(255,107,74,.32);flex:none}
+.camera-btn:active{transform:scale(.94)}
+.camera-btn i{width:20px;height:20px;border-radius:50%;border:2.5px solid #fff}
+.camera-btn.myturn{animation:campulse 1.8s ease-in-out infinite}
+@keyframes campulse{0%,100%{box-shadow:0 10px 24px rgba(255,107,74,.32)}50%{box-shadow:0 10px 24px rgba(255,107,74,.32),0 0 0 10px rgba(255,107,74,.15)}}
+
+/* Takeover */
+.takeover{position:fixed;inset:0;z-index:80;background:var(--night);color:#fff;display:flex;flex-direction:column;gap:16px;padding:calc(24px + env(safe-area-inset-top)) 20px calc(26px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .48s cubic-bezier(.22,.9,.3,1)}
+.takeover.show{transform:none}
+.take-head{display:flex;align-items:center;justify-content:space-between}
+.take-head span{font-size:10px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.55)}
+.take-timer{font-size:13px;font-weight:700;border:1.5px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 13px;font-variant-numeric:tabular-nums}
+.viewfinder{position:relative;flex:1;min-height:0;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,#33698f,#0A1728)}
+.vf-corner{position:absolute;z-index:2;width:26px;height:26px;border:2.5px solid rgba(255,255,255,.85)}
+.vf-corner.tl{top:16px;left:16px;border-right:0;border-bottom:0;border-radius:8px 0 0 0}
+.vf-corner.br{bottom:16px;right:16px;border-left:0;border-top:0;border-radius:0 0 8px 0}
+.take-copy{position:absolute;z-index:3;left:20px;right:20px;bottom:20px}
+.take-copy h2{font-family:'Archivo Black';font-size:56px;line-height:.88}
+.take-copy p{font-size:13px;font-weight:500;color:rgba(255,255,255,.7);margin-top:10px;max-width:28ch}
+.shutter-row{display:flex;align-items:center;justify-content:center;gap:34px}
+.shutter-row .side{width:70px;text-align:center;font-size:13px;font-weight:500;color:rgba(255,255,255,.55)}
+.shutter{width:76px;height:76px;border-radius:50%;background:var(--accent);border:5px solid #fff;box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.shutter:active{transform:scale(.92)}
+
+/* Sheet (Name / Install) */
+.sheet-bg{position:fixed;inset:0;z-index:95;background:rgba(4,10,18,.55);backdrop-filter:blur(3px);display:none}
+.sheet-bg.show{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:96;max-width:440px;margin:0 auto;background:var(--paper);border-radius:26px 26px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;transform:translateY(105%);transition:transform .4s cubic-bezier(.22,.9,.3,1)}
+.sheet.show{transform:none}
+.sheet h3{font-family:'Archivo Black';font-size:22px}
+.sheet p{font-size:13px;font-weight:500;color:var(--muted);line-height:1.5}
+.steps{display:flex;flex-direction:column;gap:9px}
+.step{display:flex;gap:11px;align-items:flex-start;font-size:13px;font-weight:500;color:var(--muted);line-height:1.45}
+.step i{width:20px;height:20px;border-radius:7px;background:var(--ink);color:#fff;font-size:10px;font-weight:700;font-style:normal;display:grid;place-items:center;flex:none;margin-top:1px}
+.step b{color:var(--ink)}
+
+/* Viewer / Toast */
+.viewer{position:fixed;inset:0;z-index:90;background:rgba(4,10,18,.97);display:none;flex-direction:column;color:#fff}
+.viewer.show{display:flex}
+.viewer-top{padding:calc(15px + env(safe-area-inset-top)) 17px 12px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700}
+.viewer-top button{background:rgba(255,255,255,.11);color:#fff;width:41px;height:41px;border-radius:13px;font-size:16px}
+.viewer-media{flex:1;min-height:0;display:grid;place-items:center;padding:0 12px}
+.viewer-media img{max-width:100%;max-height:70vh;object-fit:contain;border-radius:12px}
+.viewer-bottom{padding:12px 17px calc(20px + env(safe-area-inset-bottom));display:flex;gap:8px}
+.viewer-bottom button{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;border-radius:13px;padding:11px 13px;font-size:11px;font-weight:700}
+.viewer-bottom button.liked{background:var(--accent);border-color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:100px;z-index:110;transform:translate(-50%,15px);opacity:0;background:var(--ink);color:#fff;padding:11px 15px;border-radius:12px;font-size:12px;font-weight:700;transition:.22s;max-width:calc(100% - 30px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- BOOT -->
+  <section class="screen active" id="s-boot">
+    <div class="spinner" id="boot-spinner"></div>
+    <p id="boot-msg">Connecting…</p>
+    <button class="btn ghost" id="boot-retry" style="display:none" onclick="location.reload()">Retry</button>
+  </section>
+
+  <!-- START -->
+  <section class="screen" id="s-start">
+    <div class="topbar">
+      <span class="logo-mark"></span><span class="logo-word">YourTurn</span>
+    </div>
+    <h1 class="display start-h1">One trip.<br>Everyone’s turn.</h1>
+    <div class="hero">
+      <img id="hero-photo" src="https://picsum.photos/seed/adriaticanchor/800/1000" alt="">
+      <div class="hero-bottom">
+        <span class="hero-label">TODAY’S PHOTO</span>
+        <span class="hero-status" id="hero-status">Lena’s turn</span>
+        <div class="hero-crew" id="hero-crew"></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <input class="field" id="tripname" placeholder="Name your trip…" maxlength="28">
+      <button class="create-btn" id="create-btn" onclick="doCreate()">→</button>
+    </div>
+    <p class="start-foot">No account · No app store · Free</p>
+  </section>
+
+  <!-- SHARE -->
+  <section class="screen" id="s-share">
+    <div class="share-head">
+      <div><p class="eyebrow">Album created</p><h1 class="display">Bring the<br>group in.</h1></div>
+      <button class="icon-btn" onclick="show('album')">×</button>
+    </div>
+    <div class="share-card">
+      <div class="share-trip" id="share-title">—</div>
+      <div class="share-sub">Anyone with the link can add photos</div>
+      <div class="qr-wrap"><div id="qrbox"></div></div>
+      <div class="link-box"><b id="share-link">—</b><button class="copy-btn" onclick="copyLink()">Copy</button></div>
+    </div>
+    <div class="share-actions">
+      <button class="btn accent" onclick="shareTrip()">Share to WhatsApp</button>
+      <button class="btn ghost" onclick="copyLink()">Copy link</button>
+    </div>
+    <button class="btn primary" onclick="show('album')">Open album</button>
+  </section>
+
+  <!-- ALBUM -->
+  <section class="screen" id="s-album">
+    <div class="album-inner">
+      <div class="album-head">
+        <div class="album-title">
+          <h2 id="album-title">—</h2>
+          <p id="album-meta">—</p>
+        </div>
+        <button class="icon-btn" onclick="show('share')">＋</button>
+      </div>
+
+      <div class="turn-rail">
+        <span id="rail-people" style="display:flex;gap:8px"></span>
+        <div class="rail-copy"><b id="rail-name">—</b><span id="rail-next">—</span></div>
+      </div>
+
+      <div id="anchor-slot"></div>
+
+      <div class="section-row"><h3>Photos</h3><button onclick="downloadAll()">Download all</button></div>
+      <div class="gallery" id="gallery"></div>
+      <div id="empty-slot"></div>
+    </div>
+
+    <nav class="bottom-nav">
+      <button class="nav-tab active"><span class="dot"></span>Album</button>
+      <button class="nav-tab" onclick="toast('Places – noch nicht gebaut')"><span class="dot"></span>Places</button>
+      <button class="camera-btn" id="camera-btn" onclick="cameraAction()" aria-label="Camera"><i></i></button>
+      <button class="nav-tab" onclick="openSheet('crew')"><span class="dot"></span>People</button>
+      <button class="nav-tab" onclick="openSheet('install')"><span class="dot"></span>Turns</button>
+    </nav>
+  </section>
+</div>
+
+<!-- TAKEOVER -->
+<div class="takeover" id="takeover">
+  <div class="take-head"><span id="turn-label">—</span><span class="take-timer" id="countdown">2:00</span></div>
+  <div class="viewfinder">
+    <span class="vf-corner tl"></span><span class="vf-corner br"></span>
+    <div class="take-copy"><h2>Your<br>turn.</h2><p id="turn-prompt">Photograph whatever feels like this trip right now.</p></div>
+  </div>
+  <div class="shutter-row">
+    <button class="side" onclick="closeTurn()">Later</button>
+    <button class="shutter" onclick="pick(true)" aria-label="Take a photo"></button>
+    <button class="side" onclick="shufflePrompt()">Prompt ↻</button>
+  </div>
+</div>
+
+<!-- SHEETS -->
+<div class="sheet-bg" id="sheet-bg" onclick="closeSheet()"></div>
+
+<div class="sheet" id="sheet-name">
+  <h3>What should we call you?</h3>
+  <p>Only your trip group sees this. No account, no email.</p>
+  <input class="field" id="name-input" placeholder="Your name" maxlength="30">
+  <button class="btn accent" id="name-go" onclick="submitName()">Join the trip</button>
+</div>
+
+<div class="sheet" id="sheet-install">
+  <h3>Get your turn</h3>
+  <p>Turns only work if we can reach you. Add YourTurn to your home screen once — then you’ll get the ping when you’re up.</p>
+  <div class="steps">
+    <div class="step"><i>1</i><span>Tap the <b>Share</b> icon in your browser bar</span></div>
+    <div class="step"><i>2</i><span>Choose <b>Add to Home Screen</b></span></div>
+    <div class="step"><i>3</i><span>Open YourTurn from there — done</span></div>
+  </div>
+  <button class="btn primary" onclick="closeSheet()">Got it</button>
+</div>
+
+<div class="sheet" id="sheet-crew">
+  <h3>On this trip</h3>
+  <div id="crew-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  <button class="btn ghost" onclick="closeSheet();show('share')">Invite more people</button>
+</div>
+
+<!-- VIEWER -->
+<div class="viewer" id="viewer">
+  <div class="viewer-top"><span id="viewer-meta">—</span><button onclick="closeViewer()">×</button></div>
+  <div class="viewer-media"><img id="viewer-img" src="" alt=""></div>
+  <div class="viewer-bottom">
+    <button id="like-btn" onclick="toggleLike()">♡ <span id="like-count">0</span></button>
+    <button onclick="saveOriginal()">↓ Save original</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="f-pick" accept="image/*" multiple hidden>
+<input type="file" id="f-cam" accept="image/*" capture="environment" hidden>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL='https://hvjvcdhknqajoyjudweg.supabase.co';
+const SUPABASE_KEY='sb_publishable_ADk5veGqnLjQthZ0FfK3fQ_1xsyWPu3';
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+/* ---------- State ---------- */
+let me=null,trip=null,member=null,members=[],photos=[],todaysTurn=null;
+let pendingSlug=null,turnUpload=false,currentPhoto=null,turnTimer,turnSeconds=120,toastTimer,channel=null;
+const urlCache=new Map();
+const prompts=[
+  'Photograph whatever feels like this trip right now.',
+  'Find the funniest thing within ten steps.',
+  'Capture the view nobody else noticed.',
+  'Take a photo with no people in it.',
+  'Show what the group is doing between the highlights.'
+];
+
+/* ---------- Boot ---------- */
+async function boot(){
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(session) me=session.user;
+    else{
+      const {data,error}=await sb.auth.signInAnonymously();
+      if(error) throw error;
+      me=data.user;
+    }
+  }catch(e){
+    document.getElementById('boot-spinner').style.display='none';
+    document.getElementById('boot-msg').textContent='Sign-in failed: '+e.message+' — Anonymous sign-ins im Supabase-Dashboard aktiviert?';
+    document.getElementById('boot-retry').style.display='flex';
+    return;
+  }
+  const hash=location.hash.match(/#\/j\/([a-z0-9-]+)/i);
+  if(hash){ pendingSlug=hash[1]; await previewJoin(pendingSlug); return; }
+  const saved=localStorage.getItem('yt_trip_slug');
+  if(saved){ const ok=await resumeTrip(saved); if(ok) return; }
+  show('start');
+}
+
+/* ---------- Join per Link: erst Album zeigen, Name erst beim ersten Upload ---------- */
+async function previewJoin(slug){
+  const {data,error}=await sb.rpc('peek_trip',{p_slug:slug});
+  if(error||!data){ toast('Trip not found'); show('start'); return; }
+  document.getElementById('album-title').textContent=data.name;
+  document.getElementById('album-meta').textContent=data.photo_count+' photos · '+data.member_count+' people';
+  document.getElementById('rail-name').textContent='Tap + to join';
+  document.getElementById('rail-next').textContent='no account needed';
+  show('album');
+  openSheet('name');
+}
+async function submitName(){
+  const v=document.getElementById('name-input').value.trim();
+  if(!v){ toast('Add a name first'); return; }
+  const btn=document.getElementById('name-go'); btn.disabled=true; btn.textContent='Joining…';
+  try{
+    const {data,error}=await sb.rpc('join_trip',{p_slug:pendingSlug,p_display_name:v});
+    if(error) throw error;
+    trip=data.trip; member=data.member;
+    localStorage.setItem('yt_trip_slug',trip.slug);
+    closeSheet(); await enterAlbum();
+  }catch(e){ toast('Join failed: '+e.message); }
+  btn.disabled=false; btn.textContent='Join the trip';
+}
+async function resumeTrip(slug){
+  const {data,error}=await sb.from('trips').select('*').eq('slug',slug).maybeSingle();
+  if(error||!data) return false;
+  trip=data;
+  const {data:m}=await sb.from('members').select('*').eq('trip_id',trip.id).eq('user_id',me.id).maybeSingle();
+  if(!m) return false;
+  member=m; await enterAlbum(); return true;
+}
+
+/* ---------- Trip erstellen ---------- */
+async function doCreate(){
+  const name=document.getElementById('tripname').value.trim();
+  if(!name){ toast('Give your trip a name'); return; }
+  const btn=document.getElementById('create-btn'); btn.disabled=true; btn.textContent='…';
+  try{
+    const {data,error}=await sb.rpc('create_trip',{p_name:name,p_display_name:'You'});
+    if(error) throw error;
+    trip=data.trip; member=data.member;
+    localStorage.setItem('yt_trip_slug',trip.slug);
+    const link=location.origin+location.pathname+'#/j/'+trip.slug;
+    document.getElementById('share-title').textContent=trip.name;
+    document.getElementById('share-link').textContent=link.replace(/^https?:\/\//,'');
+    const q=document.getElementById('qrbox'); q.innerHTML='';
+    new QRCode(q,{text:link,width:150,height:150,colorDark:'#102033',colorLight:'#FFFDF8',correctLevel:QRCode.CorrectLevel.M});
+    await loadAlbum(); render();
+    show('share');
+  }catch(e){ toast('Failed: '+e.message); }
+  btn.disabled=false; btn.textContent='→';
+}
+
+/* ---------- Album ---------- */
+async function enterAlbum(){
+  const link=location.origin+location.pathname+'#/j/'+trip.slug;
+  document.getElementById('share-title').textContent=trip.name;
+  document.getElementById('share-link').textContent=link.replace(/^https?:\/\//,'');
+  const q=document.getElementById('qrbox'); q.innerHTML='';
+  new QRCode(q,{text:link,width:150,height:150,colorDark:'#102033',colorLight:'#FFFDF8',correctLevel:QRCode.CorrectLevel.M});
+  await loadAlbum(); render(); show('album'); subscribe();
+}
+async function loadAlbum(){
+  const today=new Date().toISOString().slice(0,10);
+  const [a,b,c]=await Promise.all([
+    sb.from('members').select('*').eq('trip_id',trip.id).order('joined_at'),
+    sb.from('photos').select('*, likes(member_id)').eq('trip_id',trip.id).order('created_at',{ascending:false}),
+    sb.from('turns').select('*').eq('trip_id',trip.id).eq('turn_date',today).maybeSingle(),
+  ]);
+  members=a.data||[]; photos=b.data||[]; todaysTurn=c.data||null;
+}
+function subscribe(){
+  channel?.unsubscribe();
+  channel=sb.channel('trip-'+trip.id)
+    .on('postgres_changes',{event:'*',schema:'public',table:'photos',filter:'trip_id=eq.'+trip.id},refresh)
+    .on('postgres_changes',{event:'*',schema:'public',table:'turns',filter:'trip_id=eq.'+trip.id},refresh)
+    .on('postgres_changes',{event:'*',schema:'public',table:'members',filter:'trip_id=eq.'+trip.id},refresh)
+    .subscribe();
+}
+async function refresh(){ await loadAlbum(); render(); }
+
+async function url(path,w=700){
+  if(urlCache.has(path+w)) return urlCache.get(path+w);
+  const {data}=await sb.storage.from('photos').createSignedUrl(path,3600);
+  urlCache.set(path+w,data?.signedUrl); return data?.signedUrl;
+}
+const nameOf=id=>members.find(m=>m.id===id)?.display_name||'—';
+const isMe=id=>id===member?.id;
+const myTurn=()=>todaysTurn && todaysTurn.member_id===member?.id && todaysTurn.status==='pending';
+
+function render(){
+  document.getElementById('album-title').textContent=trip.name;
+  document.getElementById('album-meta').textContent=photos.length+' photo'+(photos.length===1?'':'s')+' · '+members.length+' '+(members.length===1?'person':'people');
+
+  // Rail
+  const rail=document.getElementById('rail-people'); rail.innerHTML='';
+  members.slice(0,6).forEach(m=>{
+    const b=document.createElement('span');
+    b.className='rail-person'+(todaysTurn?.member_id===m.id?' active':'');
+    b.textContent=(m.display_name[0]||'?').toUpperCase();
+    rail.appendChild(b);
+  });
+  const up=todaysTurn?members.find(m=>m.id===todaysTurn.member_id):null;
+  document.getElementById('rail-name').textContent=!up?'No turn yet':(isMe(up.id)?'Your turn':up.display_name+'’s turn');
+  document.getElementById('rail-next').textContent=todaysTurn?.status==='completed'?'done for today':(myTurn()?'take it anytime today':'yours soon');
+  document.getElementById('camera-btn').classList.toggle('myturn',myTurn());
+  document.getElementById('turn-label').textContent=trip.name.toUpperCase();
+
+  // Anchor
+  const anchor=photos.find(p=>p.is_anchor);
+  const slot=document.getElementById('anchor-slot');
+  if(anchor){
+    slot.innerHTML=`<button class="anchor-card" onclick="window.viewPhotoById('${anchor.id}')">
+      <img id="anchor-img" alt=""><span class="anchor-chip">Today’s anchor</span>
+      <span class="anchor-copy"><b>${nameOf(anchor.member_id)}</b>
+      <span>One spontaneous photo, one person, every day</span></span></button>`;
+    url(anchor.storage_path,900).then(u=>{const el=document.getElementById('anchor-img'); if(el&&u)el.src=u;});
+  } else {
+    slot.innerHTML=`<div class="empty"><b>${myTurn()?'You’re up first':'No anchor yet'}</b>
+      <p>${myTurn()?'Take the first photo — it becomes today’s anchor and passes the turn on.':'The first turn photo lands here.'}</p></div>`;
+  }
+
+  // Gallery
+  const g=document.getElementById('gallery'); g.innerHTML='';
+  photos.forEach(p=>{
+    const b=document.createElement('button'); b.className='photo';
+    b.innerHTML=`<img alt=""><span class="photo-meta">${nameOf(p.member_id)}</span>`;
+    b.onclick=()=>viewPhoto(p);
+    g.appendChild(b);
+    url(p.storage_path).then(u=>{const i=b.querySelector('img'); if(u)i.src=u;});
+  });
+  document.getElementById('empty-slot').innerHTML=photos.length?'':
+    `<div class="empty"><b>Nothing here yet</b><p>Drop the link in the group chat, then start shooting. Photos land here sorted by day.</p></div>`;
+
+  // Crew sheet
+  const cl=document.getElementById('crew-list');
+  cl.innerHTML=members.map(m=>`<div style="display:flex;align-items:center;gap:10px">
+    <span class="rail-person${todaysTurn?.member_id===m.id?' active':''}" style="opacity:1">${(m.display_name[0]||'?').toUpperCase()}</span>
+    <b style="font-size:14px">${m.display_name}${isMe(m.id)?' (you)':''}</b>
+    <span style="margin-left:auto;font-size:11px;color:var(--muted);font-weight:600">${photos.filter(p=>p.member_id===m.id).length} photos</span></div>`).join('');
+}
+
+/* ---------- Upload ---------- */
+function pick(turn){ if(!member){openSheet('name');return;} turnUpload=turn; (turn?document.getElementById('f-cam'):document.getElementById('f-pick')).click(); }
+function cameraAction(){ myTurn()?openTurn():pick(false); }
+async function compress(file,maxDim=2560,q=.85){
+  try{
+    const bmp=await createImageBitmap(file);
+    const s=Math.min(1,maxDim/Math.max(bmp.width,bmp.height));
+    const c=new OffscreenCanvas(Math.round(bmp.width*s),Math.round(bmp.height*s));
+    c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+    return await c.convertToBlob({type:'image/jpeg',quality:q});
+  }catch{ return file; }
+}
+async function handle(files){
+  const wasTurn=turnUpload; turnUpload=false;
+  if(!files.length) return;
+  if(wasTurn) closeTurn();
+  toast('Uploading…');
+  let firstId=null;
+  for(const file of files){
+    try{
+      const blob=await compress(file);
+      const id=crypto.randomUUID();
+      const path=`${trip.id}/${id}.jpg`;
+      const {error:upErr}=await sb.storage.from('photos').upload(path,blob,{contentType:'image/jpeg'});
+      if(upErr) throw upErr;
+      const {error}=await sb.from('photos').insert({id,trip_id:trip.id,member_id:member.id,storage_path:path});
+      if(error) throw error;
+      firstId=firstId||id;
+    }catch(e){ toast('Upload failed: '+e.message); return; }
+  }
+  if(wasTurn && todaysTurn && firstId){
+    const {data,error}=await sb.rpc('complete_turn',{p_turn_id:todaysTurn.id,p_photo_id:firstId});
+    if(error) toast('Photo added, turn not closed: '+error.message);
+    else toast('Anchor set — '+(data?.next_member?.display_name||'someone')+' is up next');
+  } else {
+    toast(files.length+' photo'+(files.length===1?'':'s')+' added');
+  }
+  await refresh();
+}
+document.getElementById('f-pick').onchange=e=>{handle(e.target.files);e.target.value='';};
+document.getElementById('f-cam').onchange=e=>{handle(e.target.files);e.target.value='';};
+
+/* ---------- Turn ---------- */
+function openTurn(){
+  document.getElementById('takeover').classList.add('show');
+  turnSeconds=120; tick();
+  clearInterval(turnTimer);
+  turnTimer=setInterval(()=>{turnSeconds--;tick();if(turnSeconds<=0){closeTurn();toast('Turn saved for later');}},1000);
+  navigator.vibrate?.(45);
+}
+function closeTurn(){document.getElementById('takeover').classList.remove('show');clearInterval(turnTimer);}
+function tick(){document.getElementById('countdown').textContent=Math.floor(turnSeconds/60)+':'+String(turnSeconds%60).padStart(2,'0');}
+function shufflePrompt(){const el=document.getElementById('turn-prompt');let n=el.textContent;while(n===el.textContent)n=prompts[(Math.random()*prompts.length)|0];el.textContent=n;}
+
+/* ---------- Viewer ---------- */
+async function viewPhoto(p){
+  currentPhoto=p;
+  document.getElementById('viewer-img').src=await url(p.storage_path,1200);
+  document.getElementById('viewer-meta').textContent=nameOf(p.member_id)+(p.is_anchor?' · anchor':'');
+  const liked=(p.likes||[]).some(l=>l.member_id===member?.id);
+  document.getElementById('like-count').textContent=(p.likes||[]).length;
+  document.getElementById('like-btn').classList.toggle('liked',liked);
+  document.getElementById('viewer').classList.add('show');
+}
+window.viewPhotoById=id=>{const p=photos.find(x=>x.id===id); if(p)viewPhoto(p);};
+function closeViewer(){document.getElementById('viewer').classList.remove('show');}
+async function toggleLike(){
+  if(!currentPhoto||!member) return;
+  const b=document.getElementById('like-btn');
+  const liked=b.classList.toggle('liked');
+  const cnt=document.getElementById('like-count');
+  cnt.textContent=Math.max(0,+cnt.textContent+(liked?1:-1));
+  if(liked) await sb.from('likes').insert({photo_id:currentPhoto.id,member_id:member.id});
+  else await sb.from('likes').delete().match({photo_id:currentPhoto.id,member_id:member.id});
+  await refresh();
+}
+async function saveOriginal(){
+  if(!currentPhoto) return;
+  const u=await url(currentPhoto.storage_path,2560);
+  const a=document.createElement('a'); a.href=u; a.download='yourturn.jpg'; a.click();
+}
+async function downloadAll(){
+  if(!photos.length){toast('Nothing to download yet');return;}
+  toast('Opening '+photos.length+' originals…');
+  for(const p of photos.slice(0,10)){ const u=await url(p.storage_path,2560); window.open(u,'_blank'); }
+}
+
+/* ---------- UI-Helfer ---------- */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');window.scrollTo({top:0});}
+function openSheet(k){document.getElementById('sheet-bg').classList.add('show');document.getElementById('sheet-'+k).classList.add('show');}
+function closeSheet(){document.getElementById('sheet-bg').classList.remove('show');document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('show'));}
+function copyLink(){const t=document.getElementById('share-link').textContent;navigator.clipboard?.writeText('https://'+t).catch(()=>{});toast('Link copied');}
+function shareTrip(){
+  const link='https://'+document.getElementById('share-link').textContent;
+  const text=`Join ${trip.name} on YourTurn: ${link}`;
+  if(navigator.share) navigator.share({title:trip.name,text,url:link}).catch(()=>{});
+  else {navigator.clipboard?.writeText(text);toast('Invite copied for WhatsApp');}
+}
+function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('show'),2600);}
+
+/* Start-Demo */
+const demoPeople=['Lena','Marco','Sarah','Tobi','You'];
+const demoSeeds=['faceL','faceM','faceS','faceT','faceY'];
+const heroSeeds=['adriaticanchor','sunsetbay2','trailhike7','pastanight','seaswim8'];
+let demoIndex=0;
+function renderDemo(){
+  const box=document.getElementById('hero-crew');box.innerHTML='';
+  demoPeople.forEach((n,i)=>{
+    const b=document.createElement('button');
+    if(i===demoIndex)b.className='active';
+    b.innerHTML=`<img src="https://picsum.photos/seed/${demoSeeds[i]}/100/100" alt="${n}">`;
+    b.onclick=()=>setDemo(i);
+    box.appendChild(b);
+  });
+  document.getElementById('hero-status').textContent=demoPeople[demoIndex]==='You'?'Your turn':demoPeople[demoIndex]+'’s turn';
+}
+function setDemo(i){
+  demoIndex=i;renderDemo();
+  const img=document.getElementById('hero-photo');
+  img.classList.add('switching');
+  setTimeout(()=>{img.src=`https://picsum.photos/seed/${heroSeeds[i]}/800/1000`;img.classList.remove('switching');},170);
+}
+renderDemo();
+setInterval(()=>setDemo((demoIndex+1)%demoPeople.length),3000);
+
+/* Globals fürs Markup */
+Object.assign(window,{doCreate,submitName,cameraAction,pick,openTurn,closeTurn,shufflePrompt,show,openSheet,closeSheet,copyLink,shareTrip,toast,closeViewer,toggleLike,saveOriginal,downloadAll});
+
+boot();
+</script>
+</body>
+</html>
