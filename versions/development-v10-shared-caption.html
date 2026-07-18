@@ -4,11 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>YourTurn</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#F6F1E8">
+<meta name="yourturn-version" content="10">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -135,13 +131,13 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
 .copy-btn{background:#fff;color:var(--ink);font-weight:700;font-size:11px;border-radius:10px;padding:9px 12px;flex:none}
 .share-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-/* Album */
-.album-inner{flex:1;display:flex;flex-direction:column;gap:16px;padding:calc(24px + env(safe-area-inset-top)) 20px 14px}
-.album-head{display:flex;align-items:center;gap:8px}
+/* Album — the daily story is the product */
+.album-inner{flex:1;display:flex;flex-direction:column;gap:14px;padding:calc(19px + env(safe-area-inset-top)) 18px 16px;overflow:auto}
+.album-head{display:flex;align-items:center;gap:8px;padding:2px 0 3px}
 .album-title{flex:1;min-width:0}
-.album-title h2{font-family:'Archivo Black';font-size:21px}
-.album-title p{font-size:11px;font-weight:500;color:var(--muted);margin-top:3px}
-.turn-rail{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid rgba(16,32,51,.08);border-radius:18px;padding:10px 14px 10px 12px}
+.album-title h2{font-family:'Archivo Black';font-size:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.album-title p{font-size:11px;font-weight:700;color:var(--muted);margin-top:4px;letter-spacing:.02em}
+.turn-rail{display:flex;align-items:center;gap:8px;background:rgba(255,253,248,.78);border:1px solid rgba(16,32,51,.08);border-radius:20px;padding:11px 13px 11px 12px;box-shadow:0 10px 28px rgba(16,32,51,.055)}
 .rail-person{width:32px;height:32px;border-radius:50%;flex:none;position:relative;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--muted);opacity:.5;transition:.25s}
 .rail-person.active{opacity:1;background:var(--ink)}
 .rail-person.active:after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--accent);animation:railpulse 2s ease-in-out infinite}
@@ -152,25 +148,61 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
 .rail-pass-btn{flex:none;border:1px solid rgba(16,32,51,.14);border-radius:999px;padding:8px 12px;background:var(--surface);color:var(--ink);font-size:11px;font-weight:800}
 .rail-pass-btn:not(:disabled){background:var(--ink);color:#fff;border-color:var(--ink)}
 .rail-pass-btn:disabled{opacity:.45}
-.anchor-card{position:relative;border-radius:24px;overflow:hidden;min-height:230px;background:var(--night);text-align:left;padding:0;width:100%}
-.anchor-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.anchor-card:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(5,10,18,.88),rgba(5,10,18,.02) 62%)}
-.anchor-chip{position:absolute;z-index:2;top:14px;left:14px;background:rgba(255,255,255,.92);color:var(--ink);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:7px 10px;border-radius:999px}
-.anchor-copy{position:absolute;z-index:2;left:16px;right:16px;bottom:14px}
-.anchor-copy b{display:block;font-family:'Archivo Black';font-size:19px;color:#fff}
-.anchor-copy span{display:block;font-size:11px;font-weight:500;color:rgba(255,255,255,.7);margin-top:4px}
-.section-row{display:flex;align-items:baseline;justify-content:space-between}
-.section-row h3{font-family:'Archivo Black';font-size:17px}
+.story-shell{position:relative;padding-bottom:2px}
+.story-cover{position:relative;width:100%;aspect-ratio:4/5;min-height:390px;border-radius:30px;overflow:hidden;background:var(--night);display:block;text-align:left;box-shadow:0 22px 50px rgba(10,23,40,.20)}
+.story-cover:before{content:"";position:absolute;z-index:2;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.13);pointer-events:none}
+.story-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,10,18,.14) 0%,rgba(4,10,18,.02) 40%,rgba(4,10,18,.82) 100%)}
+.story-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.story-cover:active img{transform:scale(1.015)}
+.story-top{position:absolute;z-index:3;left:16px;right:16px;top:16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.story-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,253,248,.92);backdrop-filter:blur(12px);color:var(--ink);font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:8px 11px;border-radius:999px}
+.story-chip:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.story-date{color:#fff;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.story-bottom{position:absolute;z-index:3;left:18px;right:18px;bottom:72px;color:#fff}
+.story-kicker{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.66)}
+.story-author{display:flex;align-items:center;gap:10px;margin-top:9px}
+.story-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--ink);font-size:13px;font-weight:800;border:2px solid rgba(255,255,255,.35)}
+.story-author-copy b{display:block;font-family:'Archivo Black';font-size:20px;line-height:1}
+.story-author-copy span{display:block;font-size:10.5px;font-weight:600;color:rgba(255,255,255,.68);margin-top:5px}
+.story-caption-card{position:relative;z-index:5;width:calc(100% - 28px);margin:-58px 14px 0;background:var(--surface);border:1px solid rgba(16,32,51,.08);border-radius:23px;padding:18px 48px 17px 18px;text-align:left;box-shadow:0 18px 38px rgba(16,32,51,.14);min-height:112px;display:block}
+.story-caption-card:active{transform:scale(.992)}
+.story-caption-label{display:block;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.story-quote{display:block;font-size:21px;font-weight:700;line-height:1.22;letter-spacing:-.025em;color:var(--ink);overflow-wrap:anywhere}
+.story-caption-empty{display:block;font-size:18px;font-weight:700;line-height:1.3;letter-spacing:-.02em;color:#566476}
+.story-caption-meta{display:block;font-size:10.5px;font-weight:600;color:var(--muted);margin-top:10px}
+.story-edit{position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:11px;background:rgba(255,107,74,.12);color:var(--accent);display:grid;place-items:center;font-size:14px;font-weight:900}
+.story-placeholder{position:relative;min-height:410px;border-radius:30px;overflow:hidden;background:radial-gradient(circle at 82% 18%,rgba(255,107,74,.56),transparent 34%),linear-gradient(155deg,#172C43 0%,#091624 70%);color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 22px 50px rgba(10,23,40,.18)}
+.story-placeholder:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,.12);right:-70px;top:-65px;box-shadow:0 0 0 34px rgba(255,255,255,.035),0 0 0 68px rgba(255,255,255,.025)}
+.story-placeholder .story-chip{align-self:flex-start;position:relative;z-index:2}
+.story-waiting{position:relative;z-index:2}
+.story-waiting span{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.story-waiting h2{font-family:'Archivo Black';font-size:42px;line-height:.94;margin-top:10px;max-width:7.5ch}
+.story-waiting p{font-size:13px;line-height:1.5;color:rgba(255,255,255,.67);margin-top:14px;max-width:30ch}
+.story-cta{position:relative;z-index:2;width:max-content;background:#fff;color:var(--ink);border-radius:14px;padding:12px 15px;font-size:12px;font-weight:800;margin-top:18px}
+.day-section{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.section-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.section-row h3{font-family:'Archivo Black';font-size:18px}
+.section-row p{font-size:10px;font-weight:700;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.07em}
 .section-row button{color:var(--accent);font-weight:700;font-size:12px}
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.photo{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:1;padding:0;background:rgba(16,32,51,.06);animation:pop .4s cubic-bezier(.2,.8,.3,1) both}
+.section-count{font-size:10px;font-weight:800;color:var(--muted);padding-bottom:2px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.gallery .photo:first-child{grid-column:span 2;aspect-ratio:16/10}
+.gallery.compact .photo:first-child{grid-column:auto;aspect-ratio:1}
+.photo{position:relative;border-radius:19px;overflow:hidden;aspect-ratio:1;padding:0;background:rgba(16,32,51,.06);animation:pop .4s cubic-bezier(.2,.8,.3,1) both}
 @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
-.photo img{width:100%;height:100%;object-fit:cover;display:block}
-.photo-meta{position:absolute;left:9px;bottom:9px;background:rgba(4,10,18,.55);backdrop-filter:blur(8px);color:#fff;font-size:9.5px;font-weight:700;border-radius:999px;padding:6px 8px}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .28s ease}
+.photo:active img{transform:scale(1.025)}
+.photo:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(4,10,18,.48));pointer-events:none}
+.photo-meta{position:absolute;z-index:2;left:10px;bottom:9px;background:rgba(4,10,18,.55);backdrop-filter:blur(8px);color:#fff;font-size:9.5px;font-weight:700;border-radius:999px;padding:6px 8px}
 .photo.uploading{display:grid;place-items:center}
 .empty{border:1.5px dashed rgba(16,32,51,.18);border-radius:22px;padding:26px 20px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
 .empty b{font-family:'Archivo Black';font-size:16px}
 .empty p{font-size:12px;font-weight:500;color:var(--muted);line-height:1.5;max-width:30ch}
+.caption-field{width:100%;min-height:126px;resize:none;border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:15px 16px;outline:none;font:700 18px/1.35 'DM Sans',system-ui,sans-serif;color:var(--ink)}
+.caption-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,74,.11)}
+.caption-tools{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.caption-tools span{font-size:10px;font-weight:700;color:var(--muted)}
+.caption-clear{color:#A33E3E!important;border-color:rgba(163,62,62,.18)!important}
 .bottom-nav{position:sticky;bottom:0;display:flex;align-items:center;gap:6px;padding:10px 10px calc(22px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--paper) 76%,transparent)}
 .nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 6px;border-radius:13px;color:var(--muted);font-size:9.5px;font-weight:700}
 .nav-tab .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
@@ -320,8 +352,21 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
 
       <div id="anchor-slot"></div>
 
-      <div class="section-row"><h3>Photos</h3><button onclick="downloadAll()">Download all</button></div>
-      <div class="gallery" id="gallery"></div>
+      <section class="day-section" id="day-photos-section">
+        <div class="section-row">
+          <div><h3>More from today</h3><p>The moments around the main one</p></div>
+          <span class="section-count" id="day-photo-count">0 photos</span>
+        </div>
+        <div class="gallery" id="gallery"></div>
+      </section>
+
+      <section class="day-section" id="earlier-section" hidden>
+        <div class="section-row">
+          <div><h3>Earlier moments</h3><p>The rest of the trip so far</p></div>
+          <button onclick="downloadAll()">Download all</button>
+        </div>
+        <div class="gallery compact" id="earlier-gallery"></div>
+      </section>
       <div id="empty-slot"></div>
     </div>
 
@@ -387,6 +432,16 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
   <button class="btn ghost" onclick="closeSheet();show('share')">Invite more people</button>
 </div>
 
+
+<div class="sheet" id="sheet-caption">
+  <h3>One shared description</h3>
+  <p>There is only one line for the main photo. Everyone on the trip can rewrite it at any time.</p>
+  <textarea class="caption-field" id="caption-input" maxlength="160" placeholder="What should this moment be remembered as?" oninput="updateCaptionCount()"></textarea>
+  <div class="caption-tools"><span>Shared with the whole group</span><span id="caption-count">0 / 160</span></div>
+  <button class="btn accent" id="caption-save" onclick="saveSharedCaption()">Save description</button>
+  <button class="btn ghost caption-clear" id="caption-clear" onclick="clearSharedCaption()">Remove description</button>
+</div>
+
 <!-- VIEWER -->
 <div class="viewer" id="viewer">
   <div class="viewer-top"><span id="viewer-meta">—</span><button onclick="closeViewer()">×</button></div>
@@ -409,8 +464,8 @@ const SUPABASE_KEY='sb_publishable_ADk5veGqnLjQthZ0FfK3fQ_1xsyWPu3';
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
 /* ---------- State ---------- */
-let me=null,trip=null,member=null,members=[],photos=[],todaysTurn=null,myTrips=[];
-let pendingSlug=null,turnUpload=false,currentPhoto=null,turnTimer,turnSeconds=120,toastTimer,channel=null,passingTurn=false,deletingTrip=null,dashboardTimer=null,dashboardTrips=[];
+let me=null,trip=null,member=null,members=[],photos=[],captions=[],todaysTurn=null,myTrips=[];
+let pendingSlug=null,turnUpload=false,currentPhoto=null,turnTimer,turnSeconds=120,toastTimer,channel=null,passingTurn=false,deletingTrip=null,dashboardTimer=null,dashboardTrips=[],editingCaptionPhotoId=null;
 const urlCache=new Map();
 const prompts=[
   'Photograph whatever feels like this trip right now.',
@@ -639,7 +694,7 @@ async function deleteTrip(id,name){
   }
   const wasCurrent=trip?.id===id;
   if(wasCurrent){
-    channel?.unsubscribe(); channel=null; trip=null; member=null; members=[]; photos=[]; todaysTurn=null; urlCache.clear();
+    channel?.unsubscribe(); channel=null; trip=null; member=null; members=[]; photos=[]; captions=[]; todaysTurn=null; urlCache.clear();
     localStorage.removeItem('yt_trip_slug'); closeSheet();
   }
   await loadMyTrips(); renderTripLists();
@@ -685,12 +740,13 @@ async function enterAlbum(){
 }
 async function loadAlbum(){
   const today=new Date().toISOString().slice(0,10);
-  const [a,b,c]=await Promise.all([
+  const [a,b,c,d]=await Promise.all([
     sb.from('members').select('*').eq('trip_id',trip.id).order('joined_at'),
     sb.from('photos').select('*, likes(member_id)').eq('trip_id',trip.id).order('created_at',{ascending:false}),
     sb.from('turns').select('*').eq('trip_id',trip.id).eq('turn_date',today).maybeSingle(),
+    sb.from('main_photo_captions').select('*').eq('trip_id',trip.id),
   ]);
-  members=a.data||[]; photos=b.data||[]; todaysTurn=c.data||null;
+  members=a.data||[]; photos=b.data||[]; todaysTurn=c.data||null; captions=d.data||[];
 }
 function subscribe(){
   channel?.unsubscribe();
@@ -698,6 +754,7 @@ function subscribe(){
     .on('postgres_changes',{event:'*',schema:'public',table:'photos',filter:'trip_id=eq.'+trip.id},refresh)
     .on('postgres_changes',{event:'*',schema:'public',table:'turns',filter:'trip_id=eq.'+trip.id},refresh)
     .on('postgres_changes',{event:'*',schema:'public',table:'members',filter:'trip_id=eq.'+trip.id},refresh)
+    .on('postgres_changes',{event:'*',schema:'public',table:'main_photo_captions',filter:'trip_id=eq.'+trip.id},refresh)
     .subscribe();
 }
 async function refresh(){ await loadAlbum(); render(); }
@@ -710,12 +767,29 @@ async function url(path,w=700){
 const nameOf=id=>members.find(m=>m.id===id)?.display_name||'—';
 const isMe=id=>id===member?.id;
 const myTurn=()=>todaysTurn && todaysTurn.member_id===member?.id && todaysTurn.status==='pending';
+const captionOf=photoId=>captions.find(c=>c.photo_id===photoId)||null;
+const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+function storyDay(date){
+  const start=new Date((trip.created_at||date).slice(0,10)+'T12:00:00');
+  const current=new Date(date+'T12:00:00');
+  return Math.max(1,Math.round((current-start)/86400000)+1);
+}
+function storyDate(date){return new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(new Date(date+'T12:00:00'));}
+function relativeEdit(value){
+  if(!value)return '';
+  const seconds=Math.max(0,Math.floor((Date.now()-new Date(value).getTime())/1000));
+  if(seconds<45)return 'just now';
+  if(seconds<3600)return Math.floor(seconds/60)+'m ago';
+  if(seconds<86400)return Math.floor(seconds/3600)+'h ago';
+  return new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(new Date(value));
+}
 
 function render(){
+  const today=new Date().toISOString().slice(0,10);
   document.getElementById('album-title').textContent=trip.name;
-  document.getElementById('album-meta').textContent=photos.length+' photo'+(photos.length===1?'':'s')+' · '+members.length+' '+(members.length===1?'person':'people');
+  document.getElementById('album-meta').textContent='Day '+storyDay(today)+' · '+photos.length+' photo'+(photos.length===1?'':'s')+' · '+members.length+' '+(members.length===1?'person':'people');
 
-  // Rail
+  // Turn rail
   const rail=document.getElementById('rail-people'); rail.innerHTML='';
   members.slice(0,6).forEach(m=>{
     const b=document.createElement('span');
@@ -725,7 +799,7 @@ function render(){
   });
   const up=todaysTurn?members.find(m=>m.id===todaysTurn.member_id):null;
   document.getElementById('rail-name').textContent=!up?'No turn yet':(isMe(up.id)?'Your turn':up.display_name+'’s turn');
-  document.getElementById('rail-next').textContent=todaysTurn?.status==='completed'?'done for today':(myTurn()?'take it anytime today':'yours soon');
+  document.getElementById('rail-next').textContent=todaysTurn?.status==='completed'?'today’s story is locked in':(myTurn()?'you choose today’s main photo':'the main photo is up to them');
   document.getElementById('camera-btn').classList.toggle('myturn',myTurn());
   const passBtn=document.getElementById('pass-turn-btn');
   const railPassBtn=document.getElementById('rail-pass-btn');
@@ -739,38 +813,94 @@ function render(){
   railPassBtn.title=canPass?'Pass your turn to another person':((up?.display_name||'The current person')+' can pass this turn');
   document.getElementById('turn-label').textContent=trip.name.toUpperCase();
 
-  // Anchor
-  const anchor=photos.find(p=>p.is_anchor);
+  // Today's official story
+  const anchor=photos.find(p=>p.is_anchor&&p.taken_on===today);
   const slot=document.getElementById('anchor-slot');
   if(anchor){
-    slot.innerHTML=`<button class="anchor-card" onclick="window.viewPhotoById('${anchor.id}')">
-      <img id="anchor-img" alt=""><span class="anchor-chip">Today’s anchor</span>
-      <span class="anchor-copy"><b>${nameOf(anchor.member_id)}</b>
-      <span>One spontaneous photo, one person, every day</span></span></button>`;
-    url(anchor.storage_path,900).then(u=>{const el=document.getElementById('anchor-img'); if(el&&u)el.src=u;});
+    const shared=captionOf(anchor.id);
+    const author=nameOf(anchor.member_id);
+    const editor=shared?.updated_by_member_id?nameOf(shared.updated_by_member_id):null;
+    const captionMarkup=shared
+      ? `<span class="story-quote">“${esc(shared.caption)}”</span><span class="story-caption-meta">Last changed by ${esc(editor)} · ${relativeEdit(shared.updated_at)}</span>`
+      : `<span class="story-caption-empty">Tap to write the one description everyone can change.</span><span class="story-caption-meta">One shared line · editable by the whole group</span>`;
+    slot.innerHTML=`<div class="story-shell">
+      <button class="story-cover" onclick="window.viewPhotoById('${anchor.id}')" aria-label="Open today's main photo">
+        <img id="anchor-img" alt="">
+        <span class="story-top"><span class="story-chip">Official moment</span><span class="story-date">Day ${storyDay(anchor.taken_on)} · ${esc(storyDate(anchor.taken_on))}</span></span>
+        <span class="story-bottom"><span class="story-kicker">Chosen by today’s turn</span><span class="story-author"><span class="story-avatar">${esc((author[0]||'?').toUpperCase())}</span><span class="story-author-copy"><b>${esc(author)}</b><span>This is what the day will remember.</span></span></span></span>
+      </button>
+      <button class="story-caption-card" onclick="openCaptionEditor('${anchor.id}')" aria-label="Edit the shared description">
+        <span class="story-caption-label">Our shared description</span>${captionMarkup}<span class="story-edit">✎</span>
+      </button>
+    </div>`;
+    url(anchor.storage_path,1100).then(u=>{const el=document.getElementById('anchor-img'); if(el&&u)el.src=u;});
   } else {
-    slot.innerHTML=`<div class="empty"><b>${myTurn()?'You’re up first':'No anchor yet'}</b>
-      <p>${myTurn()?'Take the first photo — it becomes today’s anchor and passes the turn on.':'The first turn photo lands here.'}</p></div>`;
+    const waitName=up?.display_name||'Someone';
+    slot.innerHTML=`<div class="story-placeholder">
+      <span class="story-chip">Day ${storyDay(today)} · Today</span>
+      <div class="story-waiting"><span>${myTurn()?'This one is yours':'Waiting for '+esc(waitName)}</span><h2>Today’s story is still unwritten.</h2><p>${myTurn()?'Choose the photo that represents the day — beautiful, stupid, or completely random.':'The person with the turn decides which photo becomes the official memory.'}</p>${myTurn()?'<button class="story-cta" onclick="openTurn()">Capture your turn →</button>':''}</div>
+    </div>`;
   }
 
-  // Gallery
-  const g=document.getElementById('gallery'); g.innerHTML='';
-  photos.forEach(p=>{
-    const b=document.createElement('button'); b.className='photo';
-    b.innerHTML=`<img alt=""><span class="photo-meta">${nameOf(p.member_id)}</span>`;
-    b.onclick=()=>viewPhoto(p);
-    g.appendChild(b);
-    url(p.storage_path).then(u=>{const i=b.querySelector('img'); if(u)i.src=u;});
-  });
+  const paintGallery=(elementId,list)=>{
+    const box=document.getElementById(elementId); box.innerHTML='';
+    list.forEach(p=>{
+      const b=document.createElement('button'); b.className='photo';
+      b.innerHTML=`<img alt=""><span class="photo-meta">${esc(nameOf(p.member_id))}</span>`;
+      b.onclick=()=>viewPhoto(p); box.appendChild(b);
+      url(p.storage_path).then(u=>{const i=b.querySelector('img'); if(u)i.src=u;});
+    });
+  };
+  const todayPhotos=photos.filter(p=>p.taken_on===today&&p.id!==anchor?.id);
+  const earlierPhotos=photos.filter(p=>p.taken_on!==today);
+  paintGallery('gallery',todayPhotos);
+  paintGallery('earlier-gallery',earlierPhotos);
+  const daySection=document.getElementById('day-photos-section'); daySection.hidden=!todayPhotos.length;
+  document.getElementById('day-photo-count').textContent=todayPhotos.length+' photo'+(todayPhotos.length===1?'':'s');
+  document.getElementById('earlier-section').hidden=!earlierPhotos.length;
   document.getElementById('empty-slot').innerHTML=photos.length?'':
-    `<div class="empty"><b>Nothing here yet</b><p>Drop the link in the group chat, then start shooting. Photos land here sorted by day.</p></div>`;
+    `<div class="empty"><b>The trip starts with one photo</b><p>Everyone can add the ordinary moments. The person with the turn chooses the one that leads the day.</p></div>`;
 
   // Crew sheet
   const cl=document.getElementById('crew-list');
   cl.innerHTML=members.map(m=>`<div style="display:flex;align-items:center;gap:10px">
-    <span class="rail-person${todaysTurn?.member_id===m.id?' active':''}" style="opacity:1">${(m.display_name[0]||'?').toUpperCase()}</span>
-    <b style="font-size:14px">${m.display_name}${isMe(m.id)?' (you)':''}</b>
+    <span class="rail-person${todaysTurn?.member_id===m.id?' active':''}" style="opacity:1">${esc((m.display_name[0]||'?').toUpperCase())}</span>
+    <b style="font-size:14px">${esc(m.display_name)}${isMe(m.id)?' (you)':''}</b>
     <span style="margin-left:auto;font-size:11px;color:var(--muted);font-weight:600">${photos.filter(p=>p.member_id===m.id).length} photos</span></div>`).join('');
+}
+
+/* ---------- Shared main-photo description ---------- */
+function openCaptionEditor(photoId){
+  if(!member){openSheet('name');return;}
+  const photo=photos.find(p=>p.id===photoId&&p.is_anchor);
+  if(!photo){toast('Main photo not found');return;}
+  editingCaptionPhotoId=photoId;
+  const current=captionOf(photoId);
+  const input=document.getElementById('caption-input'); input.value=current?.caption||'';
+  document.getElementById('caption-clear').hidden=!current;
+  updateCaptionCount(); openSheet('caption');
+  setTimeout(()=>input.focus(),260);
+}
+function updateCaptionCount(){
+  const input=document.getElementById('caption-input');
+  document.getElementById('caption-count').textContent=(input?.value.length||0)+' / 160';
+}
+async function saveSharedCaption(){
+  if(!editingCaptionPhotoId||!member)return;
+  const input=document.getElementById('caption-input'); const caption=input.value.trim();
+  if(!caption){toast('Write a description first');return;}
+  const btn=document.getElementById('caption-save'); btn.disabled=true; btn.textContent='Saving…';
+  const {error}=await sb.from('main_photo_captions').upsert({photo_id:editingCaptionPhotoId,trip_id:trip.id,caption,updated_by_member_id:member.id},{onConflict:'photo_id'});
+  btn.disabled=false; btn.textContent='Save description';
+  if(error){toast('Could not save: '+error.message);return;}
+  closeSheet(); toast('Shared description updated'); await refresh();
+}
+async function clearSharedCaption(){
+  if(!editingCaptionPhotoId||!captionOf(editingCaptionPhotoId))return;
+  if(!confirm('Remove the shared description? Anyone can write a new one afterwards.'))return;
+  const {error}=await sb.from('main_photo_captions').delete().eq('photo_id',editingCaptionPhotoId);
+  if(error){toast('Could not remove it: '+error.message);return;}
+  closeSheet(); toast('Description removed'); await refresh();
 }
 
 /* ---------- Upload ---------- */
@@ -915,11 +1045,9 @@ document.getElementById('tripname').addEventListener('keydown',e=>{if(e.key==='E
 document.getElementById('sheet-tripname').addEventListener('keydown',e=>{if(e.key==='Enter')doCreateFromSheet();});
 
 /* Globals fürs Markup */
-Object.assign(window,{doCreate,doCreateFromSheet,submitName,cameraAction,pick,openTurn,closeTurn,passTurn,shufflePrompt,show,openSheet,closeSheet,openTrips,openDashboard,openNewTrip,switchTrip,deleteTrip,copyLink,shareTrip,toast,closeViewer,toggleLike,saveOriginal,downloadAll});
+Object.assign(window,{doCreate,doCreateFromSheet,submitName,cameraAction,pick,openTurn,closeTurn,passTurn,shufflePrompt,show,openSheet,closeSheet,openTrips,openDashboard,openNewTrip,switchTrip,deleteTrip,copyLink,shareTrip,toast,closeViewer,toggleLike,saveOriginal,downloadAll,openCaptionEditor,updateCaptionCount,saveSharedCaption,clearSharedCaption});
 
 boot();
 </script>
-<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(e){console.warn('SW failed',e);});</script>
-<script type="module" src="/push.js"></script>
 </body>
 </html>

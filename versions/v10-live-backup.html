@@ -4,11 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>YourTurn</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#F6F1E8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -67,59 +62,6 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
 .create-btn{width:56px;height:56px;border-radius:16px;background:var(--accent);color:#fff;font-size:22px;font-weight:700;box-shadow:0 9px 22px rgba(255,107,74,.3);flex:none}
 .create-btn:active{transform:scale(.95)}
 .start-foot{text-align:center;font-size:11px;font-weight:500;color:var(--muted)}
-.my-trips-block{display:flex;flex-direction:column;gap:9px}
-.my-trips-head{display:flex;align-items:center;justify-content:space-between}
-.my-trips-head b{font-family:'Archivo Black';font-size:15px}
-.my-trips-head span{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.trip-list{display:flex;flex-direction:column;gap:8px;max-height:42vh;overflow:auto;padding-right:2px}
-.trip-row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--surface);border-radius:17px;padding:9px}
-.trip-open{flex:1;min-width:0;text-align:left;padding:3px 5px}
-.trip-open b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
-.trip-open span{display:block;font-size:10.5px;color:var(--muted);font-weight:600;margin-top:3px}
-.trip-owner{display:inline-flex!important;width:max-content;background:rgba(255,107,74,.12);color:var(--accent)!important;border-radius:999px;padding:3px 7px;margin-top:6px!important;font-size:9px!important;text-transform:uppercase;letter-spacing:.06em}
-.trip-delete{width:38px;height:38px;border-radius:12px;background:rgba(190,42,42,.08);color:#B72F2F;font-size:17px;font-weight:700;flex:none}
-.trip-delete:disabled{opacity:.45}
-.trip-empty{padding:14px;border:1.5px dashed rgba(16,32,51,.16);border-radius:16px;color:var(--muted);font-size:12px;font-weight:600;text-align:center}
-.trip-create-row{display:flex;gap:9px}
-.trip-create-row .field{height:50px;font-size:14px}
-.trip-create-row .create-btn{width:50px;height:50px}
-.danger-note{font-size:10px!important;color:#A34A4A!important;text-align:center}
-
-
-/* Dashboard */
-#s-dashboard{padding:calc(22px + env(safe-area-inset-top)) 18px calc(28px + env(safe-area-inset-bottom));gap:18px;overflow:auto}
-.dashboard-head{display:flex;align-items:center;gap:10px}
-.dashboard-head .logo-word{font-size:18px}
-.dashboard-head-actions{margin-left:auto;display:flex;gap:8px}
-.dashboard-kicker{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
-.dashboard-title{font-size:38px;max-width:9ch}
-.dashboard-sub{font-size:12px;line-height:1.55;color:var(--muted);font-weight:500;max-width:34ch;margin-top:-7px}
-.dashboard-list{display:flex;flex-direction:column;gap:14px}
-.dash-card{position:relative;width:100%;height:262px;border-radius:27px;overflow:hidden;background:linear-gradient(135deg,#18314f,#0a1728);text-align:left;box-shadow:0 14px 34px rgba(16,32,51,.13);isolation:isolate}
-.dash-card:active{transform:scale(.992)}
-.dash-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .45s ease,transform 5s ease;opacity:1;transform:scale(1.01)}
-.dash-photo.switching{opacity:.15;transform:scale(1.045)}
-.dash-card:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(4,10,18,.10) 26%,rgba(4,10,18,.28) 51%,rgba(4,10,18,.94) 100%)}
-.dash-top{position:absolute;z-index:2;left:14px;right:14px;top:14px;display:flex;align-items:center;gap:7px}
-.dash-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.92);color:var(--ink);backdrop-filter:blur(10px);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:7px 10px}
-.dash-chip.dark{margin-left:auto;background:rgba(7,16,28,.65);color:#fff;border:1px solid rgba(255,255,255,.14)}
-.dash-bottom{position:absolute;z-index:2;left:17px;right:17px;bottom:16px;color:#fff}
-.dash-trip-name{font-family:'Archivo Black';font-size:27px;line-height:1.02;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dash-frame-meta{font-size:11px;font-weight:600;color:rgba(255,255,255,.72);margin-top:7px;min-height:16px}
-.dash-foot{display:flex;align-items:center;gap:8px;margin-top:13px}
-.dash-people{display:flex;align-items:center;padding-left:3px}
-.dash-avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--ink);font-size:9px;font-weight:800;border:2px solid rgba(255,255,255,.95);margin-left:-5px;box-shadow:0 3px 12px rgba(0,0,0,.14)}
-.dash-avatar:first-child{margin-left:0}
-.dash-count{font-size:10px;font-weight:700;color:rgba(255,255,255,.72)}
-.dash-arrow{margin-left:auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--ink);font-size:17px;font-weight:800}
-.dash-dots{position:absolute;z-index:2;left:17px;right:17px;bottom:7px;display:flex;gap:4px}
-.dash-dot{height:2px;flex:1;border-radius:3px;background:rgba(255,255,255,.23);overflow:hidden}
-.dash-dot.active{background:rgba(255,255,255,.92)}
-.dash-empty-art{position:absolute;inset:0;background:radial-gradient(circle at 72% 24%,rgba(255,107,74,.54),transparent 26%),radial-gradient(circle at 18% 70%,rgba(98,184,220,.24),transparent 32%),linear-gradient(145deg,#193553,#081728)}
-.dash-empty-art:before,.dash-empty-art:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.16)}
-.dash-empty-art:before{width:140px;height:140px;right:-25px;top:-18px}.dash-empty-art:after{width:90px;height:90px;left:28px;top:46px}
-.dashboard-create{min-height:58px;border-style:dashed;background:rgba(255,255,255,.52)}
-.dashboard-loading{padding:24px;border:1px dashed rgba(16,32,51,.16);border-radius:22px;text-align:center;color:var(--muted);font-size:12px;font-weight:700}
 
 /* Share */
 #s-share{padding:calc(24px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));gap:18px}
@@ -149,9 +91,6 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
 .rail-copy{margin-left:auto;text-align:right;white-space:nowrap}
 .rail-copy b{display:block;font-size:13px}
 .rail-copy span{display:block;font-size:10px;font-weight:500;color:var(--muted);margin-top:2px}
-.rail-pass-btn{flex:none;border:1px solid rgba(16,32,51,.14);border-radius:999px;padding:8px 12px;background:var(--surface);color:var(--ink);font-size:11px;font-weight:800}
-.rail-pass-btn:not(:disabled){background:var(--ink);color:#fff;border-color:var(--ink)}
-.rail-pass-btn:disabled{opacity:.45}
 .anchor-card{position:relative;border-radius:24px;overflow:hidden;min-height:230px;background:var(--night);text-align:left;padding:0;width:100%}
 .anchor-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .anchor-card:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(5,10,18,.88),rgba(5,10,18,.02) 62%)}
@@ -196,8 +135,6 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
 .take-copy p{font-size:13px;font-weight:500;color:rgba(255,255,255,.7);margin-top:10px;max-width:28ch}
 .shutter-row{display:flex;align-items:center;justify-content:center;gap:34px}
 .shutter-row .side{width:70px;text-align:center;font-size:13px;font-weight:500;color:rgba(255,255,255,.55)}
-.pass-turn-btn{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:7px 13px;color:#fff;font-size:12px;font-weight:700;background:rgba(255,255,255,.08)}
-.pass-turn-btn:disabled{opacity:.45}
 .shutter{width:76px;height:76px;border-radius:50%;background:var(--accent);border:5px solid #fff;box-shadow:0 0 0 3px rgba(255,255,255,.15)}
 .shutter:active{transform:scale(.92)}
 
@@ -256,28 +193,7 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
       <input class="field" id="tripname" placeholder="Name your trip…" maxlength="28">
       <button class="create-btn" id="create-btn" onclick="doCreate()">→</button>
     </div>
-    <div class="my-trips-block" id="start-trips-block" hidden>
-      <div class="my-trips-head"><b>Your trips</b><span id="start-trip-count">0 trips</span></div>
-      <div class="trip-list" id="start-trip-list"></div>
-    </div>
     <p class="start-foot">No account · No app store · Free</p>
-  </section>
-
-
-  <!-- DASHBOARD -->
-  <section class="screen" id="s-dashboard">
-    <div class="dashboard-head">
-      <span class="logo-mark"></span><span class="logo-word">YourTurn</span>
-      <div class="dashboard-head-actions">
-        <button class="icon-btn" onclick="openTrips()" aria-label="Manage trips">☰</button>
-        <button class="icon-btn" onclick="openNewTrip()" aria-label="Create trip">＋</button>
-      </div>
-    </div>
-    <span class="dashboard-kicker">Your shared memories</span>
-    <h1 class="display dashboard-title">Your trips.<br>Still moving.</h1>
-    <p class="dashboard-sub">Each album plays through the group’s latest moments — day by day, person by person.</p>
-    <div class="dashboard-list" id="dashboard-list"><div class="dashboard-loading">Loading your trips…</div></div>
-    <button class="btn ghost dashboard-create" onclick="openNewTrip()">＋ Start another trip</button>
   </section>
 
   <!-- SHARE -->
@@ -303,19 +219,16 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
   <section class="screen" id="s-album">
     <div class="album-inner">
       <div class="album-head">
-        <button class="icon-btn" onclick="openDashboard()" aria-label="Back to trips">←</button>
         <div class="album-title">
           <h2 id="album-title">—</h2>
           <p id="album-meta">—</p>
         </div>
-        <button class="icon-btn" onclick="openTrips()" aria-label="Switch trips">☰</button>
-        <button class="icon-btn" onclick="show('share')" aria-label="Invite people">＋</button>
+        <button class="icon-btn" onclick="show('share')">＋</button>
       </div>
 
       <div class="turn-rail">
         <span id="rail-people" style="display:flex;gap:8px"></span>
         <div class="rail-copy"><b id="rail-name">—</b><span id="rail-next">—</span></div>
-        <button class="rail-pass-btn" id="rail-pass-btn" data-pass-turn onclick="passTurn()">Pass</button>
       </div>
 
       <div id="anchor-slot"></div>
@@ -337,7 +250,7 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
 
 <!-- TAKEOVER -->
 <div class="takeover" id="takeover">
-  <div class="take-head"><span id="turn-label">—</span><button class="pass-turn-btn" id="pass-turn-btn" data-pass-turn onclick="passTurn()">Pass turn</button><span class="take-timer" id="countdown">2:00</span></div>
+  <div class="take-head"><span id="turn-label">—</span><span class="take-timer" id="countdown">2:00</span></div>
   <div class="viewfinder">
     <span class="vf-corner tl"></span><span class="vf-corner br"></span>
     <div class="take-copy"><h2>Your<br>turn.</h2><p id="turn-prompt">Photograph whatever feels like this trip right now.</p></div>
@@ -370,17 +283,6 @@ button,input{font:inherit}button{cursor:pointer;border:0;background:none}
   <button class="btn primary" onclick="closeSheet()">Got it</button>
 </div>
 
-<div class="sheet" id="sheet-trips">
-  <h3>Your trips</h3>
-  <p>Switch albums, create another trip, or delete a trip you created.</p>
-  <div class="trip-list" id="trip-list"></div>
-  <div class="trip-create-row">
-    <input class="field" id="sheet-tripname" placeholder="New trip name…" maxlength="28">
-    <button class="create-btn" id="sheet-create-btn" onclick="doCreateFromSheet()">→</button>
-  </div>
-  <p class="danger-note">Deleting a trip permanently removes its photos and group data.</p>
-</div>
-
 <div class="sheet" id="sheet-crew">
   <h3>On this trip</h3>
   <div id="crew-list" style="display:flex;flex-direction:column;gap:10px"></div>
@@ -409,8 +311,8 @@ const SUPABASE_KEY='sb_publishable_ADk5veGqnLjQthZ0FfK3fQ_1xsyWPu3';
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
 /* ---------- State ---------- */
-let me=null,trip=null,member=null,members=[],photos=[],todaysTurn=null,myTrips=[];
-let pendingSlug=null,turnUpload=false,currentPhoto=null,turnTimer,turnSeconds=120,toastTimer,channel=null,passingTurn=false,deletingTrip=null,dashboardTimer=null,dashboardTrips=[];
+let me=null,trip=null,member=null,members=[],photos=[],todaysTurn=null;
+let pendingSlug=null,turnUpload=false,currentPhoto=null,turnTimer,turnSeconds=120,toastTimer,channel=null;
 const urlCache=new Map();
 const prompts=[
   'Photograph whatever feels like this trip right now.',
@@ -438,10 +340,9 @@ async function boot(){
   }
   const hash=location.hash.match(/#\/j\/([a-z0-9-]+)/i);
   if(hash){ pendingSlug=hash[1]; await previewJoin(pendingSlug); return; }
-  await loadMyTrips();
-  renderTripLists();
-  if(myTrips.length){ await loadDashboard(); show('dashboard'); startDashboardRotation(); }
-  else show('start');
+  const saved=localStorage.getItem('yt_trip_slug');
+  if(saved){ const ok=await resumeTrip(saved); if(ok) return; }
+  show('start');
 }
 
 /* ---------- Join per Link: erst Album zeigen, Name erst beim ersten Upload ---------- */
@@ -464,218 +365,42 @@ async function submitName(){
     if(error) throw error;
     trip=data.trip; member=data.member;
     localStorage.setItem('yt_trip_slug',trip.slug);
-    history.replaceState(null,'',location.pathname+location.search);
-    await loadMyTrips();
     closeSheet(); await enterAlbum();
   }catch(e){ toast('Join failed: '+e.message); }
   btn.disabled=false; btn.textContent='Join the trip';
 }
-async function loadMyTrips(){
-  const {data,error}=await sb.rpc('list_my_trips');
-  if(error){ console.error(error); myTrips=[]; return []; }
-  myTrips=data||[];
-  return myTrips;
-}
-function tripRecord(id){ return myTrips.find(t=>t.id===id); }
 async function resumeTrip(slug){
-  const row=myTrips.find(t=>t.slug===slug);
-  if(!row) return false;
-  await switchTrip(row.id,false);
-  return true;
-}
-async function switchTrip(id,close=true){
-  const row=tripRecord(id);
-  if(!row){ toast('Trip not found'); return; }
-  channel?.unsubscribe(); channel=null; urlCache.clear();
-  trip={id:row.id,slug:row.slug,name:row.name,created_by:row.created_by,created_at:row.created_at};
-  member={id:row.member_id,trip_id:row.id,user_id:me.id,display_name:row.display_name};
-  localStorage.setItem('yt_trip_slug',trip.slug);
-  if(close) closeSheet();
-  await enterAlbum();
-}
-function makeTripRow(row){
-  const wrap=document.createElement('div'); wrap.className='trip-row';
-  const open=document.createElement('button'); open.className='trip-open';
-  const title=document.createElement('b'); title.textContent=row.name;
-  const meta=document.createElement('span');
-  meta.textContent=`${row.photo_count} photo${Number(row.photo_count)===1?'':'s'} · ${row.member_count} ${Number(row.member_count)===1?'person':'people'}`;
-  open.append(title,meta);
-  if(row.is_creator){ const badge=document.createElement('span'); badge.className='trip-owner'; badge.textContent='Created by you'; open.appendChild(badge); }
-  open.onclick=()=>switchTrip(row.id);
-  wrap.appendChild(open);
-  if(row.is_creator){
-    const del=document.createElement('button'); del.className='trip-delete'; del.textContent='×'; del.title='Delete trip';
-    del.disabled=deletingTrip===row.id;
-    del.onclick=e=>{e.stopPropagation();deleteTrip(row.id,row.name);};
-    wrap.appendChild(del);
-  }
-  return wrap;
-}
-function fillTripList(id){
-  const box=document.getElementById(id); if(!box)return;
-  box.innerHTML='';
-  if(!myTrips.length){box.innerHTML='<div class="trip-empty">No trips yet — create your first one below.</div>';return;}
-  myTrips.forEach(row=>box.appendChild(makeTripRow(row)));
-}
-function renderTripLists(){
-  const block=document.getElementById('start-trips-block');
-  block.hidden=!myTrips.length;
-  document.getElementById('start-trip-count').textContent=myTrips.length+' trip'+(myTrips.length===1?'':'s');
-  fillTripList('start-trip-list'); fillTripList('trip-list');
-}
-
-/* ---------- Dashboard ---------- */
-function dayNumber(row,date){
-  const start=new Date((row.created_at||date).slice(0,10)+'T00:00:00');
-  const current=new Date(date.slice(0,10)+'T00:00:00');
-  return Math.max(1,Math.floor((current-start)/86400000)+1);
-}
-function niceDate(value){
-  if(!value)return 'Waiting for the first photo';
-  const d=new Date(value);
-  const today=new Date();
-  if(d.toDateString()===today.toDateString())return 'Today';
-  return new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(d);
-}
-async function loadDashboard(){
-  clearInterval(dashboardTimer); dashboardTimer=null;
-  if(!myTrips.length){ dashboardTrips=[]; renderDashboard(); return; }
-  const ids=myTrips.map(t=>t.id);
-  const [photoResult,memberResult]=await Promise.all([
-    sb.from('photos').select('id,trip_id,member_id,storage_path,created_at,is_anchor').in('trip_id',ids).order('created_at',{ascending:false}).limit(160),
-    sb.from('members').select('id,trip_id,display_name').in('trip_id',ids).order('joined_at'),
-  ]);
-  const allPhotos=photoResult.data||[];
-  const allMembers=memberResult.data||[];
-  dashboardTrips=await Promise.all(myTrips.map(async row=>{
-    const people=allMembers.filter(m=>m.trip_id===row.id);
-    const frames=allPhotos.filter(p=>p.trip_id===row.id).slice(0,10);
-    await Promise.all(frames.map(async frame=>{frame.signedUrl=await url(frame.storage_path,900);}));
-    return {row,people,frames,index:0};
-  }));
-  renderDashboard();
-}
-function renderDashboard(){
-  const list=document.getElementById('dashboard-list'); if(!list)return;
-  list.innerHTML='';
-  if(!dashboardTrips.length){
-    list.innerHTML='<div class="dashboard-loading">No trips yet. Start one and invite the group.</div>';
-    return;
-  }
-  dashboardTrips.forEach(item=>{
-    const card=document.createElement('button'); card.className='dash-card'; card.dataset.tripId=item.row.id;
-    card.onclick=()=>switchTrip(item.row.id);
-    if(item.frames.length){
-      const img=document.createElement('img'); img.className='dash-photo'; img.alt=''; img.src=item.frames[0].signedUrl||''; card.appendChild(img);
-    }else{
-      const art=document.createElement('span'); art.className='dash-empty-art'; card.appendChild(art);
-    }
-    const top=document.createElement('span'); top.className='dash-top';
-    const day=document.createElement('span'); day.className='dash-chip dash-day';
-    const first=item.frames[0]; day.textContent=first?'Day '+dayNumber(item.row,first.created_at):'New trip';
-    const count=document.createElement('span'); count.className='dash-chip dark'; count.textContent=Number(item.row.photo_count)+' photo'+(Number(item.row.photo_count)===1?'':'s');
-    top.append(day,count); card.appendChild(top);
-
-    const bottom=document.createElement('span'); bottom.className='dash-bottom';
-    const title=document.createElement('span'); title.className='dash-trip-name'; title.textContent=item.row.name;
-    const meta=document.createElement('span'); meta.className='dash-frame-meta';
-    meta.textContent=first?`${item.people.find(m=>m.id===first.member_id)?.display_name||'Someone'} · ${niceDate(first.created_at)}`:'Waiting for the group’s first photo';
-    const foot=document.createElement('span'); foot.className='dash-foot';
-    const people=document.createElement('span'); people.className='dash-people';
-    item.people.slice(0,4).forEach(person=>{const avatar=document.createElement('span');avatar.className='dash-avatar';avatar.textContent=(person.display_name?.[0]||'?').toUpperCase();people.appendChild(avatar);});
-    const crew=document.createElement('span'); crew.className='dash-count'; crew.textContent=item.people.length+' '+(item.people.length===1?'person':'people');
-    const arrow=document.createElement('span'); arrow.className='dash-arrow'; arrow.textContent='→';
-    foot.append(people,crew,arrow); bottom.append(title,meta,foot); card.appendChild(bottom);
-    if(item.frames.length>1){
-      const dots=document.createElement('span'); dots.className='dash-dots';
-      item.frames.slice(0,6).forEach((_,i)=>{const dot=document.createElement('span');dot.className='dash-dot'+(i===0?' active':'');dots.appendChild(dot);});
-      card.appendChild(dots);
-    }
-    list.appendChild(card);
-  });
-}
-function startDashboardRotation(){
-  clearInterval(dashboardTimer);
-  dashboardTimer=setInterval(()=>{
-    if(!document.getElementById('s-dashboard').classList.contains('active'))return;
-    dashboardTrips.forEach(item=>{
-      if(item.frames.length<2)return;
-      item.index=(item.index+1)%item.frames.length;
-      const card=document.querySelector(`.dash-card[data-trip-id="${item.row.id}"]`); if(!card)return;
-      const img=card.querySelector('.dash-photo'); const frame=item.frames[item.index];
-      img.classList.add('switching');
-      const preload=new Image(); preload.onload=()=>{img.src=frame.signedUrl||'';requestAnimationFrame(()=>img.classList.remove('switching'));}; preload.src=frame.signedUrl||'';
-      card.querySelector('.dash-day').textContent='Day '+dayNumber(item.row,frame.created_at);
-      card.querySelector('.dash-frame-meta').textContent=`${item.people.find(m=>m.id===frame.member_id)?.display_name||'Someone'} · ${niceDate(frame.created_at)}`;
-      card.querySelectorAll('.dash-dot').forEach((dot,i)=>dot.classList.toggle('active',i===item.index%Math.min(6,item.frames.length)));
-    });
-  },3400);
-}
-async function openDashboard(){
-  channel?.unsubscribe(); channel=null;
-  await loadMyTrips(); renderTripLists();
-  if(!myTrips.length){show('start');return;}
-  await loadDashboard(); show('dashboard'); startDashboardRotation();
-}
-function openNewTrip(){
-  renderTripLists(); openSheet('trips');
-  setTimeout(()=>document.getElementById('sheet-tripname')?.focus(),220);
-}
-async function openTrips(){
-  await loadMyTrips(); renderTripLists(); openSheet('trips');
-}
-async function deleteTrip(id,name){
-  if(deletingTrip)return;
-  if(!confirm(`Delete “${name}” permanently? All photos, members and turns will be removed.`))return;
-  const check=prompt(`Type DELETE to remove “${name}”`);
-  if(check!=='DELETE'){ if(check!==null)toast('Deletion cancelled'); return; }
-  deletingTrip=id; renderTripLists(); toast('Deleting trip…');
-  const {data,error}=await sb.functions.invoke('delete-trip',{body:{trip_id:id}});
-  deletingTrip=null;
-  if(error){
-    let message=error.message||'Unknown error';
-    try{const body=await error.context?.json();message=body?.error||message;}catch{}
-    toast('Delete failed: '+message); renderTripLists(); return;
-  }
-  const wasCurrent=trip?.id===id;
-  if(wasCurrent){
-    channel?.unsubscribe(); channel=null; trip=null; member=null; members=[]; photos=[]; todaysTurn=null; urlCache.clear();
-    localStorage.removeItem('yt_trip_slug'); closeSheet();
-  }
-  await loadMyTrips(); renderTripLists();
-  toast((data?.trip_name||name)+' deleted');
-  if(wasCurrent) await openDashboard();
-  else if(document.getElementById('s-dashboard').classList.contains('active')) await openDashboard();
+  const {data,error}=await sb.from('trips').select('*').eq('slug',slug).maybeSingle();
+  if(error||!data) return false;
+  trip=data;
+  const {data:m}=await sb.from('members').select('*').eq('trip_id',trip.id).eq('user_id',me.id).maybeSingle();
+  if(!m) return false;
+  member=m; await enterAlbum(); return true;
 }
 
 /* ---------- Trip erstellen ---------- */
-async function createTrip(inputId,buttonId){
-  const input=document.getElementById(inputId);
-  const name=input.value.trim();
+async function doCreate(){
+  const name=document.getElementById('tripname').value.trim();
   if(!name){ toast('Give your trip a name'); return; }
-  const btn=document.getElementById(buttonId); btn.disabled=true; btn.textContent='…';
+  const btn=document.getElementById('create-btn'); btn.disabled=true; btn.textContent='…';
   try{
     const {data,error}=await sb.rpc('create_trip',{p_name:name,p_display_name:'You'});
     if(error) throw error;
-    trip=data.trip; member=data.member; input.value='';
+    trip=data.trip; member=data.member;
     localStorage.setItem('yt_trip_slug',trip.slug);
-    await loadMyTrips(); renderTripLists(); closeSheet();
     const link=location.origin+location.pathname+'#/j/'+trip.slug;
     document.getElementById('share-title').textContent=trip.name;
     document.getElementById('share-link').textContent=link.replace(/^https?:\/\//,'');
     const q=document.getElementById('qrbox'); q.innerHTML='';
     new QRCode(q,{text:link,width:150,height:150,colorDark:'#102033',colorLight:'#FFFDF8',correctLevel:QRCode.CorrectLevel.M});
-    await loadAlbum(); render(); subscribe();
+    await loadAlbum(); render();
     show('share');
   }catch(e){ toast('Failed: '+e.message); }
   btn.disabled=false; btn.textContent='→';
 }
-function doCreate(){return createTrip('tripname','create-btn');}
-function doCreateFromSheet(){return createTrip('sheet-tripname','sheet-create-btn');}
 
 /* ---------- Album ---------- */
 async function enterAlbum(){
-  if(location.hash) history.replaceState(null,'',location.pathname+location.search);
   const link=location.origin+location.pathname+'#/j/'+trip.slug;
   document.getElementById('share-title').textContent=trip.name;
   document.getElementById('share-link').textContent=link.replace(/^https?:\/\//,'');
@@ -727,16 +452,6 @@ function render(){
   document.getElementById('rail-name').textContent=!up?'No turn yet':(isMe(up.id)?'Your turn':up.display_name+'’s turn');
   document.getElementById('rail-next').textContent=todaysTurn?.status==='completed'?'done for today':(myTurn()?'take it anytime today':'yours soon');
   document.getElementById('camera-btn').classList.toggle('myturn',myTurn());
-  const passBtn=document.getElementById('pass-turn-btn');
-  const railPassBtn=document.getElementById('rail-pass-btn');
-  const hasPassOption=!!todaysTurn&&todaysTurn.status==='pending'&&members.length>1;
-  const canPass=hasPassOption&&myTurn();
-  passBtn.hidden=!canPass;
-  passBtn.disabled=passingTurn;
-  railPassBtn.hidden=!hasPassOption;
-  railPassBtn.disabled=!canPass||passingTurn;
-  railPassBtn.textContent=passingTurn?'Passing…':'Pass';
-  railPassBtn.title=canPass?'Pass your turn to another person':((up?.display_name||'The current person')+' can pass this turn');
   document.getElementById('turn-label').textContent=trip.name.toUpperCase();
 
   // Anchor
@@ -805,7 +520,7 @@ async function handle(files){
   }
   if(wasTurn && todaysTurn && firstId){
     const {data,error}=await sb.rpc('complete_turn',{p_turn_id:todaysTurn.id,p_photo_id:firstId});
-    if(error) toast('Photo added, turn not closed: '+error.message);
+    if(error) toast('Photo added, turn not closed: '+e?.message);
     else toast('Anchor set — '+(data?.next_member?.display_name||'someone')+' is up next');
   } else {
     toast(files.length+' photo'+(files.length===1?'':'s')+' added');
@@ -824,19 +539,6 @@ function openTurn(){
   navigator.vibrate?.(45);
 }
 function closeTurn(){document.getElementById('takeover').classList.remove('show');clearInterval(turnTimer);}
-async function passTurn(){
-  if(!myTurn()||passingTurn)return;
-  if(!confirm('Pass your turn to someone else?'))return;
-  passingTurn=true;
-  document.querySelectorAll('[data-pass-turn]').forEach(btn=>{btn.disabled=true;btn.textContent='Passing…';});
-  const {data,error}=await sb.rpc('pass_turn',{p_turn_id:todaysTurn.id});
-  passingTurn=false;
-  document.querySelectorAll('[data-pass-turn]').forEach(btn=>{btn.disabled=false;btn.textContent=btn.id==='rail-pass-btn'?'Pass':'Pass turn';});
-  if(error){toast('Could not pass: '+error.message);return;}
-  closeTurn();
-  toast('Passed to '+(data?.next_member?.display_name||'someone else'));
-  await refresh();
-}
 function tick(){document.getElementById('countdown').textContent=Math.floor(turnSeconds/60)+':'+String(turnSeconds%60).padStart(2,'0');}
 function shufflePrompt(){const el=document.getElementById('turn-prompt');let n=el.textContent;while(n===el.textContent)n=prompts[(Math.random()*prompts.length)|0];el.textContent=n;}
 
@@ -874,7 +576,7 @@ async function downloadAll(){
 }
 
 /* ---------- UI-Helfer ---------- */
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');if(id!=='dashboard')clearInterval(dashboardTimer);window.scrollTo({top:0});}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');window.scrollTo({top:0});}
 function openSheet(k){document.getElementById('sheet-bg').classList.add('show');document.getElementById('sheet-'+k).classList.add('show');}
 function closeSheet(){document.getElementById('sheet-bg').classList.remove('show');document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('show'));}
 function copyLink(){const t=document.getElementById('share-link').textContent;navigator.clipboard?.writeText('https://'+t).catch(()=>{});toast('Link copied');}
@@ -911,15 +613,10 @@ function setDemo(i){
 renderDemo();
 setInterval(()=>setDemo((demoIndex+1)%demoPeople.length),3000);
 
-document.getElementById('tripname').addEventListener('keydown',e=>{if(e.key==='Enter')doCreate();});
-document.getElementById('sheet-tripname').addEventListener('keydown',e=>{if(e.key==='Enter')doCreateFromSheet();});
-
 /* Globals fürs Markup */
-Object.assign(window,{doCreate,doCreateFromSheet,submitName,cameraAction,pick,openTurn,closeTurn,passTurn,shufflePrompt,show,openSheet,closeSheet,openTrips,openDashboard,openNewTrip,switchTrip,deleteTrip,copyLink,shareTrip,toast,closeViewer,toggleLike,saveOriginal,downloadAll});
+Object.assign(window,{doCreate,submitName,cameraAction,pick,openTurn,closeTurn,shufflePrompt,show,openSheet,closeSheet,copyLink,shareTrip,toast,closeViewer,toggleLike,saveOriginal,downloadAll});
 
 boot();
 </script>
-<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(e){console.warn('SW failed',e);});</script>
-<script type="module" src="/push.js"></script>
 </body>
 </html>
